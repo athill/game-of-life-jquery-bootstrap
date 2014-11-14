@@ -25,8 +25,8 @@ $(function() {
 	// setTimeout(game.play, interval);
 	$('#start').click(function(e) {
 		// test = game.begin();
-		game.runner = window.setInterval(game.play, interval);
-		
+		// game.runner = window.setInterval(game.play, interval);
+		game.begin(function() {console.log('start test')});
 		
 		return false;
 		console.log(interval);
@@ -76,7 +76,7 @@ var game =  {
 		// }
 	},
 	begin: function(callback) {
-		// var callback = callback || game.play;
+		var callback = callback || game.play;
 		// // game.rendering = true;
 		// console.log('rendering');
 		// for (var i = 0; i < size; i++) {
@@ -92,6 +92,7 @@ var game =  {
 		// 	$game.append($row);
 		// }
 		// game.runner = window.setInterval(game.play, interval);
+		game.runner = window.setInterval(game.play, interval);
 	},
 	getStatus: function(stat, alive) {
 		if (stat && alive < 2 || alive > 3) return 0;
@@ -99,10 +100,10 @@ var game =  {
 		return stat;
 	},
 	getAlive: function(i, j) {
-		var jm1 = (j == 0) ? size-1 : j-1;	//// j-1
-		var ip1 = (i+1)%size;				//// i+1
-		var jp1 = (j+1)%size;				//// j+1
-		var im1 = (i == 0) ? size-1 : i-1;	//// i-1
+		var jm1 = (j == 0) ? size-1 : j-1;	//// j-1 top
+		var ip1 = (i+1)%size;				//// i+1 right
+		var jp1 = (j+1)%size;				//// j+i bottom
+		var im1 = (i == 0) ? size-1 : i-1;	//// i-1 left
 		
 		
 		
