@@ -99,10 +99,13 @@ var game =  {
 		return stat;
 	},
 	getAlive: function(i, j) {
-		var ip1 = (i+1)%size;
-		var jp1 = (j+1)%size;
-		var im1 = (i == 0) ? size-1 : i-1;
-		var jm1 = (j == 0) ? size-1 : j-1;
+		var jm1 = (j == 0) ? size-1 : j-1;	//// j-1
+		var ip1 = (i+1)%size;				//// i+1
+		var jp1 = (j+1)%size;				//// j+1
+		var im1 = (i == 0) ? size-1 : i-1;	//// i-1
+		
+		
+		
 		return grid[i][jm1] +		//// top
 				grid[ip1][jm1] + 
 				grid[ip1][j] + 		//// right
