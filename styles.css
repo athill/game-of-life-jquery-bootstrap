@@ -8,6 +8,7 @@
 	height: 9px;
 	width: 9px;
 	display: inline-block;
+	background: black;
 }
 
 .row {
@@ -21,7 +22,4 @@
 	background: white;
 }
 
-.off {
-	background: black;
-}
 
