@@ -37,16 +37,9 @@ $(function() {
 		var $target = $(e.target);
 		//// click in cell
 		if ($target.hasClass('cell')) {
-			var id = $target.attr('id');
-			var regex = /cell_(\d+)-(\d+)/;
-			var i = id.replace(regex, "$1");
-			var j = id.replace(regex, "$2");
-			game.grid[i][j] = (game.grid[i][j] == 1) ? 0 : 1;
-			(game.grid[i][j] == 1) ? 
-				$target.addClass('on') : 
-				$target.removeClass('on');
+			game.toggleCell($target);
 		}
-	})
+	});
 });
 
 
@@ -62,6 +55,9 @@ var game =  {
 	},
 	fields: null,
 	fieldsets: null,
+	regex: {
+		toggleCell: /cell_(\d+)-(\d+)/
+	},
 	init: function() {
 		game.$fields = {
 			size: $('#size'),
@@ -173,5 +169,15 @@ var game =  {
 	updateRange: function($range) {
 		game.settings.threshold = $range.val();
 		game.setDisplayValue($range);
+	},
+	toggleCell: function($target) {
+		var id = $target.attr('id');
+		var regex = game.regex.toggleCell;
+		var i = id.replace(regex, "$1");
+		var j = id.replace(regex, "$2");
+		game.grid[i][j] = (game.grid[i][j] == 1) ? 0 : 1;
+		(game.grid[i][j] == 1) ? 
+			$target.addClass('on') : 
+			$target.removeClass('on');
 	}
 }
