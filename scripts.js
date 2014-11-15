@@ -17,8 +17,7 @@ $(function() {
 	});
 	//// #interval
 	game.$fields.interval.change(function(e) {
-		game.settings.interval = $(this).val();
-		game.setDisplayValue($(this));
+		game.updateRange($(this));
 		if (game.$grid.html() != '' && game.runner != null) {
 			game.stop();
 			game.start();
@@ -26,13 +25,11 @@ $(function() {
 	});
 	//// #size
 	game.$fields.size.change(function(e) {
-		game.settings.size = $(this).val();
-		game.setDisplayValue($(this));
+		game.updateRange($(this));
 	});	
 	//// #threshold
 	game.$fields.threshold.change(function(e) {
-		game.settings.threshold = $(this).val();
-		game.setDisplayValue($(this));
+		game.updateRange($(this));
 	});
 
 	//// #grid
@@ -172,5 +169,9 @@ var game =  {
 	setDisplayValue: function($rangeField) {
 		var $value = $('label[for="'+$rangeField.attr('id')+'"]').find('.value');
 		$value.html(' ('+$rangeField.val()+')');
-	} 
+	},
+	updateRange: function($range) {
+		game.settings.threshold = $range.val();
+		game.setDisplayValue($range);
+	}
 }
