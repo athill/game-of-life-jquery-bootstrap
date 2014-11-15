@@ -49,12 +49,14 @@ var game =  {
 	runner: null,		//// setInterval pointer
 	$grid: null,		//// grid div dom object
 	grid: [],			//// internal grid representation TODO: look into elimiating?
+	$cells: null,		//// array of cell dom objects
 	settings: {
 		size: null,		//// size of grid	
 		threshold: null,//// random threshold	
 		interval: null, //// delay between iterations
 	},
 	$fields: null,		//// references to field dom object
+	$rangevalues: {},
 	fieldsets: null,	//// sets of field objects by type
 	regex: {
 		toggleCell: /cell_(\d+)-(\d+)/
@@ -76,8 +78,15 @@ var game =  {
 		game.$grid = $('#grid');
 		//// set initial range values
 		$.each(game.fieldsets.all, function(i, v) {
+			var id = v.attr('id');
+			game.$rangevalues[id] = $('label[for="'+id+'"]').find('.value');
 			game.updateRange(v);
-		});		
+
+		});	
+		//// in case browser caches diabled attribute on refresh
+		$.each(game.fieldsets.setup, function(i, v) {
+			v.prop('disabled', false);
+		});
 
 	},
 	
@@ -93,7 +102,7 @@ var game =  {
 			}
 		}
 		//// update $grid
-		$('.cell').each(function(index) {
+		game.$cells.each(function(index) {
 			var c = game.getCoordinates($(this));
 			if (newgrid[c.x][c.y] === 1) $(this).addClass('active');
 			else $(this).removeClass('active');			
@@ -134,12 +143,14 @@ var game =  {
 			}
 			game.$grid.append($row);
 		}
+		game.$cells = $('.cell');
 		//// start game
 		game.start();
 	},
 	end: function() {
 		game.stop();
 		game.$grid.html('');
+		game.$cells = null;
 		$.each(game.fieldsets.setup, function(i, v) {
 			v.prop('disabled', false);
 			v.parent().removeClass('disabled');
@@ -176,9 +187,10 @@ var game =  {
 	},
 	updateRange: function($range) {
 		//// update setting
-		game.settings[$range.attr('id')] = $range.val();
+		var id = $range.attr('id');
+		game.settings[id] = $range.val();
 		//// update value display
-		var $value = $('label[for="'+$range.attr('id')+'"]').find('.value');
+		var $value = game.$rangevalues[id];
 		$value.html(' ('+$range.val()+')');
 	},
 	toggleCell: function($target) {
