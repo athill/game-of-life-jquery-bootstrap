@@ -1,19 +1,26 @@
-#app form {
 
-}
 
-#app fieldset {
+#controller fieldset {
 	vertical-align: top;
 	display: inline-block;
 	min-height: 3em;
 }
 
-#app label, #app input {
+#controller label, #controller input {
 	display: inline;
 }
 
-#app input[type=range] {
+#controller input[type=range] {
 	width: 10em;
+}
+
+#controller .form-group {
+	border-radius: 0.5em;
+	padding: 0.5em;
+}
+
+#controller .form-group.disabled {
+	background: #ddd;
 }
 
 #grid.mini .cell {

@@ -60,18 +60,21 @@ var game =  {
 		toggleCell: /cell_(\d+)-(\d+)/
 	},
 	init: function() {
+		//// initialize $fields
 		game.$fields = {
 			size: $('#size'),
 			threshold: $('#threshold'),
 			interval: $('#interval')
 		};		
+		//// initialize fieldsets
 		game.fieldsets = {
 			setup: [game.$fields.size, game.$fields.threshold ],
 			interactive: [game.$fields.interval]
 		};
 		game.fieldsets.all = game.fieldsets.setup.concat(game.fieldsets.interactive);
+		//// initialize $grid
 		game.$grid = $('#grid');
-
+		//// set initial range values
 		$.each(game.fieldsets.all, function(i, v) {
 			game.setDisplayValue(v);
 		});		
@@ -112,6 +115,7 @@ var game =  {
 		//// disable setup fields
 		$.each(game.fieldsets.setup, function(i, v) {
 			v.prop('disabled', true);
+			v.parent().addClass('disabled');
 		});
 		//// smaller cells for large grids
 		(size > 150) ? 
@@ -138,12 +142,12 @@ var game =  {
 		game.$grid.html('');
 		$.each(game.fieldsets.setup, function(i, v) {
 			v.prop('disabled', false);
+			v.parent().removeClass('disabled');
 		});
 				
 	},
 	start: function(callback) {
 		var callback = callback || game.play;
-
 		game.runner = window.setInterval(game.play, game.settings.interval);
 	},
 	stop: function() {
@@ -175,7 +179,7 @@ var game =  {
 		$value.html(' ('+$rangeField.val()+')');
 	},
 	updateRange: function($range) {
-		game.settings.threshold = $range.val();
+		game.settings[$range.attr('id')] = $range.val();
 		game.setDisplayValue($range);
 	},
 	toggleCell: function($target) {
