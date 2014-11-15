@@ -1,8 +1,22 @@
-#game {
+#app form {
 
 }
 
-.cell {
+#app fieldset {
+	vertical-align: top;
+	display: inline-block;
+	min-height: 3em;
+}
+
+#app label, #app input {
+	display: inline;
+}
+
+#app input[type=range] {
+	width: 10em;
+}
+
+#game .cell {
 	border: thin solid black;
 	margin: 0.25px;
 	height: 9px;
@@ -11,14 +25,14 @@
 	background: black;
 }
 
-.row {
+#game .row {
 	padding: 0;
 	margin: 0;
-	height: 12px;
+	height: 9.5px;
 	background: white;
 }
 
-.on {
+#game .on {
 	background: white;
 }
 
