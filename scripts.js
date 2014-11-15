@@ -1,8 +1,7 @@
 var grid = [];
-var $game = null;
 
 $(function() {
-	$game = $('#game');
+	game.$game = $('#game');
 	$.each(['#interval', '#size', '#threshold'], function(i, v) {
 		game.setDisplayValue($(v));
 	})
@@ -15,13 +14,15 @@ $(function() {
 		return false;
 	});
 	$('#pause').click(function(e) {
-
+		if (game.$game.html() != '') {
+			(game.runner == null) ? game.start() : game.stop();	
+		}
 		return false;
 	});
 	$('#interval').change(function(e) {
 		game.settings.interval = $('#interval').val();
 		game.setDisplayValue($(this));
-		if ($game.html() != '') {
+		if (game.$game.html() != '') {
 			game.stop();
 			game.start();
 		}
@@ -67,7 +68,7 @@ var game =  {
 	},
 	begin: function(callback) {
 		var callback = callback || game.play;
-		$game.html("");
+		game.$game.html("");
 		grid: [];
 		game.settings.interval = $('#interval').val();
 		game.settings.threshold = $('#threshold').val();
@@ -82,7 +83,7 @@ var game =  {
 				if (on) classes += ' on';
 				$row.append('<div class="'+classes+'" id="cell_'+i+'-'+j+'"></div>');
 			}
-			$game.append($row);
+			game.$game.append($row);
 		}
 		game.start();
 	},
