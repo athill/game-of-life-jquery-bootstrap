@@ -81,20 +81,18 @@ var game =  {
 	play: function() {
 		var newgrid = [],
 			size = game.settings.size;
-		for (var i = 0; i  < size; i++) {
-			newgrid[i] = [];
-			for (var j = 0; j < size; j++) {
-				var active = game.getActive(i, j);
-				newgrid[i][j] = game.getStatus(game.grid[i][j], active);
+		for (var x = 0; x  < size; x++) {
+			newgrid.push([]);
+			for (var y = 0; y < size; y++) {
+				var active = game.getActive(x, y);
+				newgrid[x].push(game.getStatus(game.grid[x][y], active));
 			}
 		}
-		for (var i = 0; i < size; i++) {
-			for (var j = 0; j < size; j++) {
-				var $cell = $('#cell_'+i+'-'+j);
-				if (newgrid[i][j]) $cell.addClass('active');
-				else $cell.removeClass('active');
-			}
-		}
+		$('.cell').each(function(index) {
+			var c = game.getCoordinates($(this));
+			if (newgrid[c.x][c.y] === 1) $(this).addClass('active');
+			else $(this).removeClass('active');			
+		});
 		game.grid = newgrid;
 	},
 	begin: function(callback) {
@@ -112,15 +110,15 @@ var game =  {
 		(size > 150) ? 
 			game.$grid.addClass('mini') : 
 			game.$grid.removeClass('mini');
-		for (var i = 0; i < size; i++) {
+		for (var x = 0; x < size; x++) {
 			var $row = $('<div class="row"></div>');
-			game.grid[i] = [];
-			for (var j = 0; j <  size; j++) {
+			game.grid.push([]);
+			for (var y = 0; y <  size; y++) {
 				var active = (Math.random() >= game.settings.threshold) ? 1 : 0;
-				game.grid[i].push(active);
+				game.grid[x].push(active);
 				var classes = 'cell';
 				if (active) classes += ' active';
-				$row.append('<div class="'+classes+'" id="cell_'+i+'-'+j+'"></div>');
+				$row.append('<div class="'+classes+'" id="cell_'+x+'-'+y+'"></div>');
 			}
 			game.$grid.append($row);
 		}
@@ -148,20 +146,20 @@ var game =  {
 		if (!stat && active == 3) return 1;
 		return stat;
 	},
-	getActive: function(i, j) {
-		var jm1 = (j == 0) ? game.settings.size-1 : j-1,	//// j-1 top
-			ip1 = (i+1)%game.settings.size,				//// i+1 right
-			jp1 = (j+1)%game.settings.size,				//// j+i bottom
-			im1 = (i == 0) ? game.settings.size-1 : i-1;	//// i-1 left
+	getActive: function(x, y) {
+		var ym1 = (y == 0) ? game.settings.size-1 : y-1,	//// y-1 top
+			xp1 = (x+1)%game.settings.size,				//// x+1 right
+			yp1 = (y+1)%game.settings.size,				//// y+i bottom
+			xm1 = (x == 0) ? game.settings.size-1 : x-1;	//// x-1 left
 			
-		return game.grid[i][jm1] +		//// top
-				game.grid[ip1][jm1] + 
-				game.grid[ip1][j] + 		//// right
-				game.grid[ip1][jp1] + 
-				game.grid[i][jp1] +		//// bottom
-				game.grid[im1][jp1] +
-				game.grid[im1][j] +		//// left
-				game.grid[im1][jm1];
+		return game.grid[x][ym1] +		//// top
+				game.grid[xp1][ym1] + 
+				game.grid[xp1][y] + 		//// right
+				game.grid[xp1][yp1] + 
+				game.grid[x][yp1] +		//// bottom
+				game.grid[xm1][yp1] +
+				game.grid[xm1][y] +		//// left
+				game.grid[xm1][ym1];
 	},
 	setDisplayValue: function($rangeField) {
 		var $value = $('label[for="'+$rangeField.attr('id')+'"]').find('.value');
@@ -172,13 +170,19 @@ var game =  {
 		game.setDisplayValue($range);
 	},
 	toggleCell: function($target) {
-		var id = $target.attr('id'),
-			regex = game.regex.toggleCell,
-			i = id.replace(regex, "$1"),
-			j = id.replace(regex, "$2");
-		game.grid[i][j] = (game.grid[i][j] == 1) ? 0 : 1;
-		(game.grid[i][j] == 1) ? 
+		var c = game.getCoordinates($target);
+		game.grid[c.x][c.y] = (game.grid[c.x][c.y] == 1) ? 0 : 1;
+		(game.grid[c.x][c.y] == 1) ? 
 			$target.addClass('active') : 
 			$target.removeClass('active');
+	},
+	getCoordinates: function($cell) {
+		var id = $cell.attr('id'),
+			regex = game.regex.toggleCell;
+		return {
+			x: id.replace(regex, "$1"),
+			y: id.replace(regex, "$2")
+		};
+
 	}
 }
