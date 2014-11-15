@@ -1,42 +1,42 @@
-// var game.grid = [];
-
 $(function() {
-	game.$game = $('#game');
-	$.each(['#interval', '#size', '#threshold'], function(i, v) {
-		game.setDisplayValue($(v));
-	})
+	game.init();
+
 	$('#start').click(function(e) {
 		game.begin();
 		return false;
 	});
 	$('#stop').click(function(e) {
-		game.stop();
+		game.end();
 		return false;
 	});
 	$('#pause').click(function(e) {
-		if (game.$game.html() != '') {
+		if (game.$grid.html() != '') {
 			(game.runner == null) ? game.start() : game.stop();	
 		}
 		return false;
 	});
-	$('#interval').change(function(e) {
-		game.settings.interval = $('#interval').val();
+	//// #interval
+	game.$fields.interval.change(function(e) {
+		game.settings.interval = $(this).val();
 		game.setDisplayValue($(this));
-		if (game.$game.html() != '') {
+		if (game.$grid.html() != '' && game.runner != null) {
 			game.stop();
 			game.start();
 		}
 	});
-	$('#size').change(function(e) {
-		game.settings.size = $('#size').val();
+	//// #size
+	game.$fields.size.change(function(e) {
+		game.settings.size = $(this).val();
 		game.setDisplayValue($(this));
 	});	
-	$('#threshold').change(function(e) {
-		game.settings.threshold = $('#threshold').val();
+	//// #threshold
+	game.$fields.threshold.change(function(e) {
+		game.settings.threshold = $(this).val();
 		game.setDisplayValue($(this));
 	});
 
-	$('#game').click(function(e) {
+	//// #grid
+	game.$grid.click(function(e) {
 		var $target = $(e.target);
 		//// click in cell
 		if ($target.hasClass('cell')) {
@@ -52,16 +52,38 @@ $(function() {
 	})
 });
 
+
+
 var game =  {
 	runner: null,
-	$game: null,
+	$grid: null,
 	grid: [],
 	settings: {
 		size: 20,
 		threshold: 0.5,
 		interval: null,
-		
 	},
+	fields: null,
+	fieldsets: null,
+	init: function() {
+		game.$fields = {
+			size: $('#size'),
+			threshold: $('#threshold'),
+			interval: $('#interval')
+		};		
+		game.fieldsets = {
+			setup: [game.$fields.size, game.$fields.threshold ],
+			interactive: [game.$fields.interval]
+		};
+		game.fieldsets.all = game.fieldsets.setup.concat(game.fieldsets.interactive);
+		game.$grid = $('#grid');
+
+		$.each(game.fieldsets.all, function(i, v) {
+			game.setDisplayValue(v);
+		});		
+
+	},
+	
 	play: function() {
 		var newgrid = [];
 		var size = game.settings.size;
@@ -83,14 +105,19 @@ var game =  {
 	},
 	begin: function(callback) {
 		var callback = callback || game.play;
-		game.$game.html("");
+		game.$grid.html("");
 		game.grid = [];
-		game.settings.interval = $('#interval').val();
-		game.settings.threshold = $('#threshold').val();
-		var size = game.settings.size = $('#size').val();
+		$.each(game.fieldsets.all, function(i, v) {
+			var key = v.attr('id');
+			game.settings[key] = v.val();
+		});
+		var size = game.settings.size;
+		$.each(game.fieldsets.setup, function(i, v) {
+			v.prop('disabled', true);
+		});
 		(size > 150) ? 
-			game.$game.addClass('mini') : 
-			game.$game.removeClass('mini');
+			game.$grid.addClass('mini') : 
+			game.$grid.removeClass('mini');
 		for (var i = 0; i < size; i++) {
 			var $row = $('<div class="row"></div>');
 			game.grid[i] = [];
@@ -101,9 +128,17 @@ var game =  {
 				if (on) classes += ' on';
 				$row.append('<div class="'+classes+'" id="cell_'+i+'-'+j+'"></div>');
 			}
-			game.$game.append($row);
+			game.$grid.append($row);
 		}
 		game.start();
+	},
+	end: function() {
+		game.stop();
+		game.$grid.html('');
+		$.each(game.fieldsets.setup, function(i, v) {
+			v.prop('disabled', false);
+		});
+				
 	},
 	start: function(callback) {
 		var callback = callback || game.play;

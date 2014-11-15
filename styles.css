@@ -16,17 +16,17 @@
 	width: 10em;
 }
 
-#game.mini .cell {
+#grid.mini .cell {
 	margin: 0;
 	height: 4px;
 	width: 4px;	
 }
 
-#game.mini .row {
+#grid.mini .row {
 	height: 4px;
 }
 
-#game .cell {
+#grid .cell {
 	border: thin solid black;
 	margin: 0.25px;
 	height: 9px;
@@ -35,14 +35,14 @@
 	background: black;
 }
 
-#game .row {
+#grid .row {
 	padding: 0;
 	margin: 0;
 	height: 9.5px;
 	background: white;
 }
 
-#game .on {
+#grid .on {
 	background: white;
 }
 
