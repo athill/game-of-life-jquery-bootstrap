@@ -53,7 +53,7 @@ var game =  {
 		threshold: 0.5,
 		interval: null,
 	},
-	fields: null,
+	$fields: null,
 	fieldsets: null,
 	regex: {
 		toggleCell: /cell_(\d+)-(\d+)/
@@ -83,15 +83,15 @@ var game =  {
 		for (var i = 0; i  < size; i++) {
 			newgrid[i] = [];
 			for (var j = 0; j < size; j++) {
-				var alive = game.getAlive(i, j);
-				newgrid[i][j] = game.getStatus(game.grid[i][j], alive);
+				var active = game.getActive(i, j);
+				newgrid[i][j] = game.getStatus(game.grid[i][j], active);
 			}
 		}
 		for (var i = 0; i < size; i++) {
 			for (var j = 0; j < size; j++) {
 				var $cell = $('#cell_'+i+'-'+j);
-				if (newgrid[i][j]) $cell.addClass('on');
-				else $cell.removeClass('on');
+				if (newgrid[i][j]) $cell.addClass('active');
+				else $cell.removeClass('active');
 			}
 		}
 		game.grid = newgrid;
@@ -115,10 +115,10 @@ var game =  {
 			var $row = $('<div class="row"></div>');
 			game.grid[i] = [];
 			for (var j = 0; j <  size; j++) {
-				var on = (Math.random() >= game.settings.threshold) ? 1 : 0;
-				game.grid[i].push(on);
+				var active = (Math.random() >= game.settings.threshold) ? 1 : 0;
+				game.grid[i].push(active);
 				var classes = 'cell';
-				if (on) classes += ' on';
+				if (active) classes += ' active';
 				$row.append('<div class="'+classes+'" id="cell_'+i+'-'+j+'"></div>');
 			}
 			game.$grid.append($row);
@@ -142,12 +142,12 @@ var game =  {
 		window.clearInterval(game.runner);
 		game.runner = null;
 	},
-	getStatus: function(stat, alive) {
-		if (stat && alive < 2 || alive > 3) return 0;
-		if (!stat && alive == 3) return 1;
+	getStatus: function(stat, active) {
+		if (stat && active < 2 || active > 3) return 0;
+		if (!stat && active == 3) return 1;
 		return stat;
 	},
-	getAlive: function(i, j) {
+	getActive: function(i, j) {
 		var jm1 = (j == 0) ? game.settings.size-1 : j-1;	//// j-1 top
 		var ip1 = (i+1)%game.settings.size;				//// i+1 right
 		var jp1 = (j+1)%game.settings.size;				//// j+i bottom
@@ -177,7 +177,7 @@ var game =  {
 		var j = id.replace(regex, "$2");
 		game.grid[i][j] = (game.grid[i][j] == 1) ? 0 : 1;
 		(game.grid[i][j] == 1) ? 
-			$target.addClass('on') : 
-			$target.removeClass('on');
+			$target.addClass('active') : 
+			$target.removeClass('active');
 	}
 }
