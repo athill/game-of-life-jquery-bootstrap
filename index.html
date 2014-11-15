@@ -8,18 +8,25 @@
 </head>
 <body>
 <div id="app">
-	<form action="" id="controller" class="form inline-form">
+	<h1>The Game of Life</h1>
+	<form action="" id="controller" class="form form-inline">
 	<fieldset>
 		<legend>Setup</legend>
-		<label for="threshold">Threshold <span class="value"></span>: </label>
-		<input type="range" min="0.1" max="0.9" step="0.1" value="0.8"  id="threshold"/>
-		<label for="size">Size: <span class="value"></span></label>
-		<input type="range" min="10" max="100" step="10" value="30"  id="size"/>
+		<div class="form-group" title="Change of cell starting inactive. Higher threshold means less chance a cell will be active">
+			<label for="threshold">Threshold <span class="value"></span>: </label>
+			<input type="range" min="0.1" max="0.9" step="0.01" value="0.8"  id="threshold"/>
+		</div>
+		<div class="form-group" title="Number of cells">
+			<label for="size">Size: <span class="value"></span></label>
+			<input type="range" min="10" max="200" step="10" value="30"  id="size"/>
+		</div>
 	</fieldset>
 	<fieldset>
 		<legend>Interactive</legend>
-		<label for="interval">Interval: <span class="value"></span></label>
-		<input type="range" min="50" max="500" step="50" value="50"  id="interval"/>
+		<div class="form-group" title="Interval between iterations, in milliseconds">
+			<label for="interval">Interval: <span class="value"></span></label>
+			<input type="range" min="50" max="500" step="50" value="50"  id="interval"/>
+		</div>
 	</fieldset>
 
 	<fieldset>
@@ -37,9 +44,9 @@
 			Pause
 		</button>		
 	</fieldset>
-
 	</form>
-
+	<em>Toggle cells by clicking on them.</em>
+	<!-- render game here -->
 	<div id="game"></div>
 </div>
 

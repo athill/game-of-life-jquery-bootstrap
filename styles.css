@@ -16,6 +16,16 @@
 	width: 10em;
 }
 
+#game.mini .cell {
+	margin: 0;
+	height: 4px;
+	width: 4px;	
+}
+
+#game.mini .row {
+	height: 4px;
+}
+
 #game .cell {
 	border: thin solid black;
 	margin: 0.25px;
