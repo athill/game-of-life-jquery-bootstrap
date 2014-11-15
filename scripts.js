@@ -76,7 +76,7 @@ var game =  {
 		game.$grid = $('#grid');
 		//// set initial range values
 		$.each(game.fieldsets.all, function(i, v) {
-			game.setDisplayValue(v);
+			game.updateRange(v);
 		});		
 
 	},
@@ -174,13 +174,12 @@ var game =  {
 				game.grid[xm1][y] +		//// left
 				game.grid[xm1][ym1];
 	},
-	setDisplayValue: function($rangeField) {
-		var $value = $('label[for="'+$rangeField.attr('id')+'"]').find('.value');
-		$value.html(' ('+$rangeField.val()+')');
-	},
 	updateRange: function($range) {
+		//// update setting
 		game.settings[$range.attr('id')] = $range.val();
-		game.setDisplayValue($range);
+		//// update value display
+		var $value = $('label[for="'+$range.attr('id')+'"]').find('.value');
+		$value.html(' ('+$range.val()+')');
 	},
 	toggleCell: function($target) {
 		var c = game.getCoordinates($target);
