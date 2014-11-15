@@ -46,16 +46,16 @@ $(function() {
 
 
 var game =  {
-	runner: null,
-	$grid: null,
-	grid: [],
+	runner: null,		//// setInterval pointer
+	$grid: null,		//// grid div dom object
+	grid: [],			//// internal grid representation TODO: look into elimiating?
 	settings: {
-		size: 20,
-		threshold: 0.5,
-		interval: null,
+		size: null,		//// size of grid	
+		threshold: null,//// random threshold	
+		interval: null, //// delay between iterations
 	},
-	$fields: null,
-	fieldsets: null,
+	$fields: null,		//// references to field dom object
+	fieldsets: null,	//// sets of field objects by type
 	regex: {
 		toggleCell: /cell_(\d+)-(\d+)/
 	},
