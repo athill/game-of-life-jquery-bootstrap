@@ -81,6 +81,7 @@ var game =  {
 	play: function() {
 		var newgrid = [],
 			size = game.settings.size;
+		//// build new grid
 		for (var x = 0; x  < size; x++) {
 			newgrid.push([]);
 			for (var y = 0; y < size; y++) {
@@ -88,28 +89,35 @@ var game =  {
 				newgrid[x].push(game.getStatus(game.grid[x][y], active));
 			}
 		}
+		//// update $grid
 		$('.cell').each(function(index) {
 			var c = game.getCoordinates($(this));
 			if (newgrid[c.x][c.y] === 1) $(this).addClass('active');
 			else $(this).removeClass('active');			
 		});
+		//// update grid
 		game.grid = newgrid;
 	},
 	begin: function(callback) {
 		var callback = callback || game.play;
+		//// reset grid
 		game.$grid.html("");
 		game.grid = [];
+		//// initialize settings
 		$.each(game.fieldsets.all, function(i, v) {
 			var key = v.attr('id');
 			game.settings[key] = v.val();
 		});
 		var size = game.settings.size;
+		//// disable setup fields
 		$.each(game.fieldsets.setup, function(i, v) {
 			v.prop('disabled', true);
 		});
+		//// smaller cells for large grids
 		(size > 150) ? 
 			game.$grid.addClass('mini') : 
 			game.$grid.removeClass('mini');
+		//// build grid and $grid
 		for (var x = 0; x < size; x++) {
 			var $row = $('<div class="row"></div>');
 			game.grid.push([]);
@@ -122,6 +130,7 @@ var game =  {
 			}
 			game.$grid.append($row);
 		}
+		//// start game
 		game.start();
 	},
 	end: function() {
