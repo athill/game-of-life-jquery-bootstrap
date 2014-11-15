@@ -1,6 +1,6 @@
 $(function() {
 	game.init();
-
+	//// controls
 	$('#start').click(function(e) {
 		game.begin();
 		return false;
@@ -15,6 +15,7 @@ $(function() {
 		}
 		return false;
 	});
+
 	//// #interval
 	game.$fields.interval.change(function(e) {
 		game.updateRange($(this));
@@ -78,8 +79,8 @@ var game =  {
 	},
 	
 	play: function() {
-		var newgrid = [];
-		var size = game.settings.size;
+		var newgrid = [],
+			size = game.settings.size;
 		for (var i = 0; i  < size; i++) {
 			newgrid[i] = [];
 			for (var j = 0; j < size; j++) {
@@ -148,10 +149,10 @@ var game =  {
 		return stat;
 	},
 	getActive: function(i, j) {
-		var jm1 = (j == 0) ? game.settings.size-1 : j-1;	//// j-1 top
-		var ip1 = (i+1)%game.settings.size;				//// i+1 right
-		var jp1 = (j+1)%game.settings.size;				//// j+i bottom
-		var im1 = (i == 0) ? game.settings.size-1 : i-1;	//// i-1 left
+		var jm1 = (j == 0) ? game.settings.size-1 : j-1,	//// j-1 top
+			ip1 = (i+1)%game.settings.size,				//// i+1 right
+			jp1 = (j+1)%game.settings.size,				//// j+i bottom
+			im1 = (i == 0) ? game.settings.size-1 : i-1;	//// i-1 left
 			
 		return game.grid[i][jm1] +		//// top
 				game.grid[ip1][jm1] + 
@@ -171,10 +172,10 @@ var game =  {
 		game.setDisplayValue($range);
 	},
 	toggleCell: function($target) {
-		var id = $target.attr('id');
-		var regex = game.regex.toggleCell;
-		var i = id.replace(regex, "$1");
-		var j = id.replace(regex, "$2");
+		var id = $target.attr('id'),
+			regex = game.regex.toggleCell,
+			i = id.replace(regex, "$1"),
+			j = id.replace(regex, "$2");
 		game.grid[i][j] = (game.grid[i][j] == 1) ? 0 : 1;
 		(game.grid[i][j] == 1) ? 
 			$target.addClass('active') : 
