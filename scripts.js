@@ -186,8 +186,10 @@ var game =  {
 				game.grid[xm1][ym1];
 	},
 	updateRange: function($range) {
+
 		//// update setting
 		var id = $range.attr('id');
+		// console.log('updating range '+id+' '+$range.val(), $range.prop('value'));
 		game.settings[id] = $range.val();
 		//// update value display
 		var $value = game.$rangevalues[id];
